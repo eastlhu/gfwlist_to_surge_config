@@ -1,0 +1,2 @@
+# surge
+SSEncrypt.module

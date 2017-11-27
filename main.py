@@ -154,8 +154,20 @@ def generate_surge(domains, proxy_name, surge_proxy):
             "\n".join(rule))
     surge_conf_content = surge_conf_content.replace('__PROXY__',
             "\n".join(proxy))
-    surge_conf_content = surge_conf_content.replace('__PROXY_GROUP__',
+
+    #处理Proxy Group
+
+    surge_conf_content = surge_conf_content.replace('__CHINA_OTHER_PROXY__',
+            "{}".format(", ".join(map(lambda x: x.decode('utf-8'), proxy_name))))
+    surge_conf_content = surge_conf_content.replace('__ALL_PROXY__',
             "Proxy = select, {}".format(", ".join(map(lambda x: x.decode('utf-8'), proxy_name))))
+
+    surge_conf_content = surge_conf_content.replace('__AUTO_PROXY__',
+            "@auto = url-test,{},url = http://www.gstatic.com/generate_204".format(", ".join(map(lambda x: x.decode('utf-8'), proxy_name))))
+
+    surge_conf_content = surge_conf_content.replace('__AUTO_FINAL_PROXY__',
+            "Proxy = select, @Auto, DIRECT, {}".format(", ".join(map(lambda x: x.decode('utf-8'), proxy_name))))
+
     return surge_conf_content.encode('utf-8')
 
 def find_fast_ip(ipset):
